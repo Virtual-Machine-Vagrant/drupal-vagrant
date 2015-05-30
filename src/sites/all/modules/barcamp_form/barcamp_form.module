@@ -1,0 +1,46 @@
+<?php
+
+function barcamp_form_menu() {
+  $items['form/world'] = array(
+    'title' => 'Hello with Form', //Titulo
+    'page callback' => 'barcamp_form_callback',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+  return $items;
+}
+
+function barcamp_form_callback() {
+  return drupal_get_form('barcamp_form_hello_form');
+}
+
+function barcamp_form_hello_form() {
+
+  $form = array();
+
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#default_value' => '',
+    '#size' => 60,
+    '#maxlength' => 128,
+    '#required' => TRUE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Say Hello')
+  );
+
+  return $form;
+}
+
+function barcamp_form_hello_form_validate($form, $form_state) {
+  if (strlen($form_state['values']['name']) < 5) {
+    form_set_error('name', t('Your name is very short'));
+  }
+}
+
+function barcamp_form_hello_form_submit($form, $form_state) {
+  drupal_set_message('Hello' . $form_state['values']['name']);
+}

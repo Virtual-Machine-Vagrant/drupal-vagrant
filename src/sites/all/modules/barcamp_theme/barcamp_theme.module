@@ -1,0 +1,33 @@
+<?php
+
+function barcamp_theme_menu() {
+
+  $items['theme/world/%'] = array(
+    'title' => 'Hello World With Parameters Themed', //Titulo
+    'page callback' => 'barcamp_theme_parameter_callback',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+
+  return $items;
+}
+
+
+function barcamp_theme_theme() {
+  return array(
+    'barcamp_theme_hello_world' => array(
+      'template' => 'templates/barcamp_theme_hello_world',
+    ),
+  );
+}
+
+/**
+ * Callback para mostrar el hello world.
+ */
+function barcamp_theme_parameter_callback() {
+  $parametro = arg(2);
+  $parametro_limpio = check_plain($parametro);
+  return theme('barcamp_theme_hello_world', array(
+    'name' => $parametro_limpio
+  ));
+}

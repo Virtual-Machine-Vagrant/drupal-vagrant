@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Define tablas para el modulo.
+ *
+ * @return mixed
+ */
+function barcamp_crud_schema() {
+
+  $schema['barcamp_crud_names'] = array(
+    'description' => 'Names Sample Tables',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}

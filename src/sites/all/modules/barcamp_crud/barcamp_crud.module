@@ -1,0 +1,127 @@
+<?php
+
+function barcamp_crud_menu() {
+  $items['crud'] = array(
+    'title' => 'List', //Titulo
+    'page callback' => 'barcamp_crud_list',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+  $items['crud/create'] = array(
+    'title' => 'Create', //Titulo
+    'page callback' => 'barcamp_crud_edit_create',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+  $items['crud/edit/%'] = array(
+    'title' => 'Edit', //Titulo
+    'page callback' => 'barcamp_crud_edit_create',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+  $items['crud/delete/%'] = array(
+    'title' => 'Edit', //Titulo
+    'page callback' => 'barcamp_crud_delete',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+  return $items;
+}
+
+function barcamp_crud_list() {
+
+  $results = db_query('SELECT * FROM {barcamp_crud_names}');
+
+  $rows = array();
+  foreach ($results as $result) {
+    $row = array();
+    $row[] = $result->id;
+    $row[] = $result->name;
+    $row[] =  l(t('Edit'), 'crud/edit/' . $result->id)
+        . ' ' . l(t('Delete'), 'crud/delete/' . $result->id);
+    $rows[] = $row;
+  }
+
+  $out = array();
+  $out[] = array(
+    '#children' => l(t('New'), 'crud/create')
+  );
+
+  $out[] = array(
+    '#theme' => 'table',
+     '#header' => array(
+        'id',
+        'name',
+        'actions'
+     ),
+     '#rows' => $rows,
+  );
+
+  return $out;
+}
+
+function barcamp_crud_edit_create() {
+  $out = array();
+  $out[] = array(
+    '#children' => l(t('List'), 'crud')
+  );
+  $out[] = drupal_get_form('barcamp_crud_name_form');
+  return $out;
+}
+
+function barcamp_crud_delete() {
+  db_query('DELETE FROM {barcamp_crud_names} WHERE id = :id',
+    array('id' => arg(2)));
+  drupal_goto('crud');
+}
+
+function barcamp_crud_name_form() {
+
+  $form = array();
+
+  if (arg(1) == 'edit' && is_numeric(arg(2))) {
+    $record = db_query('SELECT * FROM {barcamp_crud_names} WHERE id = :id',
+      array('id' => arg(2)));
+    $name = $record->fetch();
+  }
+
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#default_value' => isset($name) ? $name->name : '',
+    '#size' => 60,
+    '#maxlength' => 128,
+    '#required' => TRUE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Say Hello')
+  );
+
+  return $form;
+}
+
+function barcamp_crud_name_form_validate($form, $form_state) {
+  if (strlen($form_state['values']['name']) < 5) {
+    form_set_error('name', t('Your name is very short'));
+  }
+}
+
+function barcamp_crud_name_form_submit($form, $form_state) {
+  if (arg(1) == 'create') {
+    $name = array(
+      'name' => $form_state['values']['name'],
+    );
+    drupal_write_record('barcamp_crud_names', $name);
+    drupal_goto('crud');
+  }
+  if (arg(1) == 'edit' && is_numeric(arg(2))) {
+    $name = array(
+      'id' => arg(2),
+      'name' => $form_state['values']['name'],
+    );
+    drupal_write_record('barcamp_crud_names', $name, 'id');
+  }
+  drupal_set_message('Saved');
+}

@@ -1,0 +1,6 @@
+name = "barcamp_theme"
+description = "Sample of the use of templates"
+core = 7.x
+project = "barcamp"
+
+;dependencies[] = "ctools"

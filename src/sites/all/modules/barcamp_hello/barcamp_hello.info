@@ -1,0 +1,6 @@
+name = "barcamp_hello"
+description = "A simple Hello World."
+core = 7.x
+project = "barcamp"
+
+;dependencies[] = "ctools"

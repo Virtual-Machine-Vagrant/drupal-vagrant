@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * Implementa hook_menu
+ *
+ * Este hook define las rutas (urls) y quien debe atender
+ * la peticion (callback).
+ *
+ */
+function barcamp_hello_menu() {
+
+  $items['hello/world'] = array(
+    'title' => 'Hello World', //Titulo
+    'page callback' => 'barcamp_hello_callback',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+
+  $items['hello/world/%'] = array(
+    'title' => 'Hello World With Parameters', //Titulo
+    'page callback' => 'barcamp_hello_parameter_callback',   //Funcion que maneja el callback
+    'access arguments' => array('access content'), //Permisos
+    'type' => MENU_CALLBACK, //Tipo de Menu, hay varios
+  );
+
+  return $items;
+}
+
+/**
+ * Manaje el callback de item de menu definido, debe retornar
+ * el contenido para poner como main content de la pagina.
+ *
+ * @return string.
+ */
+function barcamp_hello_callback() {
+  return '<h1>' . t('Hello World') . '</h1>';
+}
+
+/**
+ * Este callback atiende el menu item que tiene parametro
+ * y lo muestra.
+ */
+function barcamp_hello_parameter_callback() {
+  $parametro = arg(2);
+  $parametro_limpio = check_plain($parametro);
+  return '<h1>' . t('Hi %s', array('%s' => $parametro_limpio)) . '</h1>';
+}

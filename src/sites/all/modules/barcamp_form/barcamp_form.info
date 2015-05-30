@@ -1,0 +1,6 @@
+name = "barcamp_form"
+description = "Sample of the use of forms"
+core = 7.x
+project = "barcamp"
+
+;dependencies[] = "ctools"
