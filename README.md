@@ -2,6 +2,14 @@
 
 An Empty Linux Vagrant Machine to start a new project
 
+# To use this
+
+Just install vagrant and virtualbox in your machine, checkout this project, go to the root folder and run
+
+ vagrant up
+ 
+That will start the vagrant provisioning for a virtual machine with linux and all setted up to work in the src folder where we have a drupal 7 instalation.
+
 ## Properties
   
 - Debian Based machine
