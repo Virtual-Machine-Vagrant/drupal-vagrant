@@ -27,7 +27,7 @@ function barcamp_hello_menu() {
 }
 
 /**
- * Manaje el callback de item de menu definido, debe retornar
+ * Maneja el callback de item de menu definido, debe retornar
  * el contenido para poner como main content de la pagina.
  *
  * @return string.
